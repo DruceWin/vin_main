@@ -95,7 +95,8 @@ def get_links(request):
         domen = (request.POST['domen'])
         queryset = Car.objects.filter(is_hidden_v2=False).values_list("brand", "model", "vin")[0:100]
         with open('links.txt', 'w') as file:
-            file.write(str([f"{domen}/{i[0]}/{i[1].split()[0]}/{i[2]}/" for i in queryset]))
+            for i in queryset:
+                file.write(f"{domen}/{i[0]}/{i[1].split()[0]}/{i[2]} \n")
         return FileResponse(open('links.txt', 'rb'), as_attachment=True)
     return render(request, "get_links_page.html")
 
