@@ -93,7 +93,7 @@ def get_links(request):
                                     'picture-in-picture; web-share" allowfullscreen></iframe>')
     if request.method == 'POST':
         domen = (request.POST['domen'])
-        queryset = Car.objects.filter(is_hidden_v2=False).values_list("brand", "model", "vin")[0:100]
+        queryset = Car.objects.filter(is_hidden_v2=False).values_list("brand", "model", "vin")
         with open('links.txt', 'w') as file:
             for i in queryset:
                 file.write(f"{domen}/{i[0]}/{i[1].split()[0]}/{i[2]} \n")
