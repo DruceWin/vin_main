@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h2>Для получения файла со всеми ссылками введите полную ссылку домена:</h2>
+<form action="" method="POST">
+    {% csrf_token %}
+    Домен: <input type="text" name="domen"><br>
+    <button>СКАЧАТЬ!</button>
+</form>
+</body>
+</html>

@@ -16,6 +16,8 @@ class Car(models.Model):
     sale_type = models.CharField('Тип продажи', max_length=255)
     damage = models.CharField('Повреждения', max_length=255)
     photo = ArrayField(models.CharField('Фото', max_length=255))
+    is_hidden = models.BooleanField('Скрыть для API v1', default=False)
+    is_hidden_v2 = models.BooleanField('Скрыть для API v2', default=False)
 
     def __str__(self):
         return f'{self.brand} {self.model} {self.engine} {self.engine}'
@@ -23,7 +25,3 @@ class Car(models.Model):
     class Meta:
         verbose_name = 'Автомобиль'
         verbose_name_plural = 'Автомобили'
-
-
-class Photos(models.Model):
-    image = models.ImageField(upload_to='media')

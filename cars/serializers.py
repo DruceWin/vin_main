@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Car, Photos
+from .models import Car
 
 
 class CarSerializer(serializers.ModelSerializer):
@@ -15,12 +15,3 @@ class VinSerializer(serializers.ModelSerializer):
     class Meta:
         model = Car
         fields = ('vin',)
-
-    # def to_representation(self, instance):
-    #     return f'https://vinbenzin.info/catalogue/{instance.vin}'
-
-
-class PhotoSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Photos
-        fields = '__all__'
