@@ -22,7 +22,7 @@ class LinkListPagination(PageNumberPagination):
 
 
 class CarAPIList(generics.ListAPIView):
-    # permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, )
     queryset = Car.objects.order_by('pk')
     serializer_class = CarSerializer
     pagination_class = CarAPIListPagination
@@ -35,7 +35,7 @@ class CarAPIList(generics.ListAPIView):
 
 
 class CarAPIList_v2(generics.ListAPIView):
-    # permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, )
     queryset = Car.objects.order_by('pk')
     serializer_class = CarSerializer
     pagination_class = CarAPIListPagination
@@ -54,13 +54,13 @@ class CarAPIList_v2(generics.ListAPIView):
 
 
 class AddCars(generics.CreateAPIView):
-    # permission_classes = (IsAuthenticated, )
+    permission_classes = (IsAuthenticated, )
     queryset = Car.objects.all()
     serializer_class = CarSerializer
 
 
 class LinkList(ListAPIView):
-    # permission_classes = (IsAuthenticated,)
+    permission_classes = (IsAuthenticated,)
     queryset = Car.objects.values('vin',).order_by('pk')
     serializer_class = VinSerializer
     pagination_class = LinkListPagination

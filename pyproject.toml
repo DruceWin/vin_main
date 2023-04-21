@@ -3,12 +3,17 @@ name = "vin-main-poetry"
 version = "0.1.0"
 description = ""
 authors = ["Andrei Kulakov <kulakov1@tut.by>"]
-readme = "README.md"
 packages = [{include = "vin_main_poetry"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
 django = "^4.2"
+dj-config-url = "^0.1.1"
+djangorestframework = "^3.14.0"
+psycopg2-binary = "^2.9.6"
+django-cors-headers = "^3.14.0"
+whitenoise = "^6.4.0"
+gunicorn = "^20.1.0"
 
 
 [build-system]
