@@ -5,10 +5,10 @@ databases:
 
 services:
   - type: web
-    name: vincheck
+    name: vin_main_poetry
     env: python
     buildCommand: "./build.sh"
-    startCommand: "gunicorn mysite.wsgi:application"
+    startCommand: "gunicorn vin_main_poetry.wsgi:application"
     autoDeploy: false
     envVars:
       - key: DATABASE_URL
