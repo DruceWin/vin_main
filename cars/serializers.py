@@ -8,7 +8,7 @@ class CarSerializer(serializers.ModelSerializer):
         model = Car
         fields = ('year', 'brand', 'model', 'vin', 'odometer',
                   'engine', 'gearbox', 'drive_train', 'auction_date',
-                  'sale_type', 'damage', 'photo')
+                  'sale_type', 'damage', 'photo', 'is_hidden', 'is_hidden_v2')
 
 
 class VinSerializer(serializers.ModelSerializer):
