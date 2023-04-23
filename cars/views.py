@@ -23,20 +23,20 @@ class LinkListPagination(PageNumberPagination):
 
 class CarAPIList(generics.ListAPIView):
     permission_classes = (IsAuthenticated, )
-    queryset = Car.objects.order_by('pk')
+    queryset = Car.objects.order_by('-pk')
     serializer_class = CarSerializer
     pagination_class = CarAPIListPagination
 
     def get_queryset(self):
         vin = self.kwargs.get('vin')
         if not vin:
-            return Car.objects.filter(is_hidden_v2=False).order_by('pk')
-        return Car.objects.filter(vin=vin, is_hidden_v2=False)
+            return Car.objects.order_by('-pk')
+        return Car.objects.filter(vin=vin).order_by('-pk')
 
 
 class CarAPIList_v2(generics.ListAPIView):
     permission_classes = (IsAuthenticated, )
-    queryset = Car.objects.order_by('pk')
+    queryset = Car.objects.order_by('-pk')
     serializer_class = CarSerializer
     pagination_class = CarAPIListPagination
 
@@ -45,12 +45,12 @@ class CarAPIList_v2(generics.ListAPIView):
         model = self.kwargs.get('model')
         vin = self.kwargs.get('vin')
         if brand and model and vin:
-            return Car.objects.filter(brand=brand, model__icontains=model, vin=vin, is_hidden_v2=False).order_by('pk')
+            return Car.objects.filter(brand=brand, model__icontains=model, vin=vin, is_hidden_v2=False).order_by('-pk')
         elif brand and model:
-            return Car.objects.filter(brand=brand, model__icontains=model, is_hidden_v2=False).order_by('pk')
+            return Car.objects.filter(brand=brand, model__icontains=model, is_hidden_v2=False).order_by('-pk')
         elif brand:
-            return Car.objects.filter(brand=brand, is_hidden_v2=False).order_by('pk')
-        return Car.objects.filter(is_hidden_v2=False).order_by('pk')
+            return Car.objects.filter(brand=brand, is_hidden_v2=False).order_by('-pk')
+        return Car.objects.filter(is_hidden_v2=False).order_by('-pk')
 
 
 class AddCars(generics.CreateAPIView):
@@ -61,7 +61,7 @@ class AddCars(generics.CreateAPIView):
 
 class LinkList(ListAPIView):
     permission_classes = (IsAuthenticated,)
-    queryset = Car.objects.values('vin',).order_by('pk')
+    queryset = Car.objects.values('vin',).order_by('-pk')
     serializer_class = VinSerializer
     pagination_class = LinkListPagination
 
