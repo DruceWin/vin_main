@@ -23,20 +23,30 @@ class LinkListPagination(PageNumberPagination):
 
 class CarAPIList(generics.ListAPIView):
     permission_classes = (IsAuthenticated, )
-    queryset = Car.objects.order_by('-pk')
+    queryset = Car.objects.order_by('pk')
     serializer_class = CarSerializer
     pagination_class = CarAPIListPagination
 
     def get_queryset(self):
         vin = self.kwargs.get('vin')
         if not vin:
-            return Car.objects.order_by('-pk')
-        return Car.objects.filter(vin=vin).order_by('-pk')
+            q = Car.objects.filter(is_hidden=False).order_by('pk').values_list('id', flat=True)
+            return q
+        return Car.objects.filter(vin=vin).values_list('id', flat=True)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        page = Car.objects.filter(id__in=self.paginate_queryset(queryset))
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class CarAPIList_v2(generics.ListAPIView):
     permission_classes = (IsAuthenticated, )
-    queryset = Car.objects.order_by('-pk')
+    queryset = Car.objects.order_by('pk')
     serializer_class = CarSerializer
     pagination_class = CarAPIListPagination
 
@@ -45,12 +55,27 @@ class CarAPIList_v2(generics.ListAPIView):
         model = self.kwargs.get('model')
         vin = self.kwargs.get('vin')
         if brand and model and vin:
-            return Car.objects.filter(brand=brand, model__icontains=model, vin=vin, is_hidden_v2=False).order_by('-pk')
+            return Car.objects.filter(brand=brand,
+                                      model__icontains=model,
+                                      vin=vin,
+                                      is_hidden_v2=False).order_by('pk').values_list('id', flat=True)
         elif brand and model:
-            return Car.objects.filter(brand=brand, model__icontains=model, is_hidden_v2=False).order_by('-pk')
+            return Car.objects.filter(brand=brand,
+                                      model__icontains=model,
+                                      is_hidden_v2=False).order_by('pk').values_list('id', flat=True)
         elif brand:
-            return Car.objects.filter(brand=brand, is_hidden_v2=False).order_by('-pk')
-        return Car.objects.filter(is_hidden_v2=False).order_by('-pk')
+            return Car.objects.filter(brand=brand,
+                                      is_hidden_v2=False).order_by('pk').values_list('id', flat=True)
+        return Car.objects.filter(is_hidden_v2=False).order_by('pk').values_list('id', flat=True)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.filter_queryset(self.get_queryset())
+        page = Car.objects.filter(id__in=self.paginate_queryset(queryset))
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            return self.get_paginated_response(serializer.data)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 class AddCars(generics.CreateAPIView):
@@ -61,7 +86,7 @@ class AddCars(generics.CreateAPIView):
 
 class LinkList(ListAPIView):
     permission_classes = (IsAuthenticated,)
-    queryset = Car.objects.values('vin',).order_by('-pk')
+    queryset = Car.objects.values('vin',).order_by('pk')
     serializer_class = VinSerializer
     pagination_class = LinkListPagination
 
@@ -75,7 +100,6 @@ def get_brands(request):
 @api_view(['GET'])
 def get_models(request, brand):
     queryset = Car.objects.filter(is_hidden_v2=False, brand=brand).distinct("model").values_list("model")
-    print(queryset)
     set_of_model = set()
     for product in queryset:
         short_name_model = product[0].split()
@@ -99,4 +123,3 @@ def get_links(request):
                 file.write(f"{domen}/{i[0]}/{i[1].split()[0]}/{i[2]} \n")
         return FileResponse(open('links.txt', 'rb'), as_attachment=True)
     return render(request, "get_links_page.html")
-
