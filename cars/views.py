@@ -32,7 +32,7 @@ class CarAPIList(generics.ListAPIView):
         if not vin:
             q = Car.objects.filter(is_hidden=False).order_by('pk').values_list('id', flat=True)
             return q
-        return Car.objects.filter(vin=vin).values_list('id', flat=True)
+        return Car.objects.filter(vin=vin, is_hidden=False).values_list('id', flat=True)
 
     def list(self, request, *args, **kwargs):
         queryset = self.filter_queryset(self.get_queryset())
