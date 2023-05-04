@@ -30,7 +30,7 @@ urlpatterns = [
     path('api/v2/carlist/', CarAPIList_v2.as_view()),
     path('api/v2/carlist/<str:brand>/', CarAPIList_v2.as_view()),
     path('api/v2/carlist/<str:brand>/<str:model>/', CarAPIList_v2.as_view()),
-    path('api/v2/carlist/<str:brand>/<str:model>/<str:vin>/', CarAPIList_v2.as_view()),
+    path('api/v2/car/<str:vin>/', CarAPIList_v2.as_view()),
     path('api/v2/get_links/', get_links),
 ]
 

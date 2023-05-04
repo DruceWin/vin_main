@@ -54,10 +54,8 @@ class CarAPIList_v2(generics.ListAPIView):
         brand = self.kwargs.get('brand')
         model = self.kwargs.get('model')
         vin = self.kwargs.get('vin')
-        if brand and model and vin:
-            return Car.objects.filter(brand=brand,
-                                      model__icontains=model,
-                                      vin=vin,
+        if vin:
+            return Car.objects.filter(vin=vin,
                                       is_hidden_v2=False).order_by('pk').values_list('id', flat=True)
         elif brand and model:
             return Car.objects.filter(brand=brand,
