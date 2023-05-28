@@ -17,7 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from cars.views import CarAPIList, AddCars, LinkList, CarAPIList_v2, get_brands, get_models, get_links
+from cars.views import CarAPIList, AddCars, LinkList, CarAPIList_v2, get_brands, get_models, get_links, \
+    CarAPIList_v2_last_10
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -27,6 +28,7 @@ urlpatterns = [
     path('get/all/links/', LinkList.as_view()),
     path('api/v2/brand/', get_brands),
     path('api/v2/model/<str:brand>/', get_models),
+    path('api/v2/last_10_cars/', CarAPIList_v2_last_10.as_view()),
     path('api/v2/carlist/', CarAPIList_v2.as_view()),
     path('api/v2/carlist/<str:brand>/', CarAPIList_v2.as_view()),
     path('api/v2/carlist/<str:brand>/<str:model>/', CarAPIList_v2.as_view()),

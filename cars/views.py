@@ -58,11 +58,11 @@ class CarAPIList_v2(generics.ListAPIView):
             return Car.objects.filter(vin=vin,
                                       is_hidden_v2=False).order_by('pk').values_list('id', flat=True)
         elif brand and model:
-            return Car.objects.filter(brand=brand,
+            return Car.objects.filter(brand__iexact=brand,
                                       model__icontains=model,
                                       is_hidden_v2=False).order_by('pk').values_list('id', flat=True)
         elif brand:
-            return Car.objects.filter(brand=brand,
+            return Car.objects.filter(brand__iexact=brand,
                                       is_hidden_v2=False).order_by('pk').values_list('id', flat=True)
         return Car.objects.filter(is_hidden_v2=False).order_by('pk').values_list('id', flat=True)
 
@@ -74,6 +74,22 @@ class CarAPIList_v2(generics.ListAPIView):
             return self.get_paginated_response(serializer.data)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class CarAPIList_v2_last_10(generics.ListAPIView):
+    permission_classes = (IsAuthenticated, )
+    queryset = Car.objects.order_by('pk')
+    serializer_class = CarSerializer
+    pagination_class = CarAPIListPagination
+
+    def get_queryset(self):
+        return Car.objects.filter(is_hidden_v2=False).order_by('-pk').values_list('id', flat=True)[:10]
+
+    def list(self, request, *args, **kwargs):
+        queryset = Car.objects.filter(id__in=self.get_queryset())
+        count_car = Car.objects.filter(is_hidden_v2=False).count()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({"total": count_car, "cars": serializer.data})
 
 
 class AddCars(generics.CreateAPIView):
